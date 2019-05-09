@@ -1,0 +1,46 @@
+# ==========================================
+# Configuration for FarmMachine
+# ==========================================
+
+# DO NOT CHANGE THIS, PLEASE! (it would make me sad)
+configVersion: 1
+
+
+
+# ==========================================
+#   FARMING
+# ==========================================
+
+# map crops to their seed materials
+#   Want to disable a crop?
+#     simply comment it out with a #
+#   Feel free to add more, if necessary!
+cropMapping:
+  WHEAT_SEEDS: WHEAT
+  BEETROOT_SEEDS: BEETROOTS
+  CARROT: CARROTS
+  POTATO: POTATOES
+  NETHER_WART: NETHER_WART
+
+# size of farming grid
+#   DEFAULT: 3 (3x3)
+farmSize: 3
+
+# should farmers till soil automatically
+#   DEFAULT: false
+tillSoil: false
+
+# plant the first available seed if farmland is empty
+#   DEFAULT: true
+plantWhenEmpty: true
+
+
+
+# ==========================================
+#   MESSAGES
+# ==========================================
+messages:
+  farmerNoObserver: 'INVALID FARMER, must be an OBSERVER'
+  farmerNoUpDown: 'INVALID FARMER, cannot farm up or down'
+  farmerNoChest: 'INVALID FARMER, no chest found'
+  farmerValid: 'Looks like a valid farmer!'

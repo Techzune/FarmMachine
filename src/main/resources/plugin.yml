@@ -1,0 +1,6 @@
+name: @artifactId@
+description: Automatically plant and harvest using Observers!
+version: @version@
+main: com.jordanstremming.farmmachine.FarmMachine
+
+api-version: 1.13
