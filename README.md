@@ -1,5 +1,5 @@
 # FarmMachine, a Spigot Minecraft plugin
-Plant and harvest crops with an Observer, a sign, and a chest!
+Plant and harvest crops with an Observer, a Sign, and a Chest
 
 ## Installation
 *Designed for Spigot 1.13.2+*  
