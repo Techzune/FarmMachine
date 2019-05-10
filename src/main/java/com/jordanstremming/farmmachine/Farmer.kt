@@ -1,8 +1,9 @@
 package com.jordanstremming.farmmachine
 
+import com.jordanstremming.farmhand.crop.FarmCrop
+import com.jordanstremming.farmhand.crop.FarmCropState
 import com.jordanstremming.farmmachine.Util.getBlockRight
 import com.jordanstremming.farmmachine.Util.getChestInventory
-import org.bukkit.CropState
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.block.Block
@@ -10,7 +11,6 @@ import org.bukkit.block.BlockFace
 import org.bukkit.block.Chest
 import org.bukkit.block.data.Ageable
 import org.bukkit.block.data.type.Observer
-import org.bukkit.material.Crops
 import java.util.concurrent.ThreadLocalRandom
 
 class Farmer(private val observerBlock: Block, private val observer: Observer, chestBlock: Block) {
@@ -48,13 +48,15 @@ class Farmer(private val observerBlock: Block, private val observer: Observer, c
         // check if can plant
         if (cropsBlock.type != Material.AIR)
             return
-        if (soilBlock.type != Material.FARMLAND && !tillSoil(soilBlock))
-            return
+
+        // check if if should till
+        if (soilBlock.type != Material.FARMLAND)
+            tillSoil(soilBlock)
 
 
         // iterate through chest inventory and find new crops
         val invIter = getChestInventory(chest).iterator()
-        var crops: Crops?
+        var crops: FarmCrop?
         while (invIter.hasNext()) {
             // grab the next item and attempt to get crop type
             val item = invIter.next() ?: continue
@@ -66,15 +68,15 @@ class Farmer(private val observerBlock: Block, private val observer: Observer, c
 
             // set the crop
             cropsBlock.type = Material.valueOf(cropType)
-            crops = cropsBlock.state.data as? Crops
-            if (crops == null) {
+            crops = FarmCrop.fromBlock(cropsBlock)
+            if (!crops.valid) {
                 // if it failed to place as a crop; cancel
                 cropsBlock.type = Material.AIR
                 continue
             }
 
             // set the crop to seeded and remove the item from chest
-            crops.state = CropState.SEEDED
+            crops.state = FarmCropState.SEEDED
             item.amount = item.amount - 1
             return
 
@@ -83,16 +85,16 @@ class Farmer(private val observerBlock: Block, private val observer: Observer, c
 
     private fun harvestCrops(cropsBlock: Block) {
         // get crops
-        val crops = cropsBlock.state.data as? Crops
+        val crops = FarmCrop.fromBlock(cropsBlock)
 
         // plant crops if non-existent
-        if (crops == null) {
+        if (!crops.valid) {
             plantCrops(cropsBlock)
             return
         }
 
         // don't harvest if not ripe
-        if (crops.state != CropState.RIPE) {
+        if (crops.state != FarmCropState.RIPE) {
             return
         }
 
